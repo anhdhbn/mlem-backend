@@ -1,3 +1,5 @@
 .vs/
 MM.Auth/bin/
 MM.Auth/obj/
+MM/obj/
+MM/bin/
