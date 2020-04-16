@@ -84,10 +84,7 @@ namespace MM
                      .AsImplementedInterfaces()
                      .WithScopedLifetime());
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-            });
+            
 
             services.AddAuthentication(x =>
             {
@@ -137,11 +134,32 @@ namespace MM
             {
             };
             ChangeToken.OnChange(() => Configuration.GetReloadToken(), onChange);
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "My APIs",
+                    Description = "ASP.NET Core Web API"
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+
             app.UseRouting();
             app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseAuthentication();
@@ -152,22 +170,19 @@ namespace MM
             {
                 endpoints.MapControllers();
             });
-            if (env.IsDevelopment())
+            
+            app.UseSwagger(c =>
             {
-                app.UseSwagger(c =>
-                {
-                    c.RouteTemplate = "mm/swagger/{documentname}/swagger.json";
-                });
+                c.RouteTemplate = "mm/swagger/{documentname}/swagger.json";
+            });
 
-                // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-                // specifying the Swagger JSON endpoint.
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/mm/swagger/v1/swagger.json", "Auth API");
-                    c.RoutePrefix = "mm/swagger";
-                });
-                app.UseDeveloperExceptionPage();
-            }
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/mm/swagger/v1/swagger.json", "Auth API");
+                c.RoutePrefix = "mm/swagger";
+            });
         }
     }
 }

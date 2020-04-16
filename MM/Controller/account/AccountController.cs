@@ -182,6 +182,7 @@ namespace MM.Controller.account
             return new Account_AccountDTO(Account);
         }
 
+        [AllowAnonymous]
         [Route(AccountRoute.Register), HttpPost]
         public async Task<ActionResult<Account_AccountDTO>> Register([FromBody] Account_RegisterDTO Account_RegisterDTO)
         {
