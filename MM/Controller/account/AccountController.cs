@@ -20,7 +20,7 @@ namespace MM.Controller.account
         private const string Default = Api + "/account";
         public const string Login = Default + "/login";
         public const string Get = Default + "/get";
-        public const string Create = Default + "/register";
+        public const string Register = Default + "/register";
         public const string Update = Default + "/update";
         public const string ChangePassword = Default + "/change-password";
         public const string ForgotPassword = Default + "/forgot-password";
@@ -182,8 +182,8 @@ namespace MM.Controller.account
             return new Account_AccountDTO(Account);
         }
 
-        [Route(AccountRoute.Create), HttpPost]
-        public async Task<ActionResult<Account_AccountDTO>> Create([FromBody] Account_RegisterDTO Account_RegisterDTO)
+        [Route(AccountRoute.Register), HttpPost]
+        public async Task<ActionResult<Account_AccountDTO>> Register([FromBody] Account_RegisterDTO Account_RegisterDTO)
         {
             if (!ModelState.IsValid)
                 throw new BindException(ModelState);

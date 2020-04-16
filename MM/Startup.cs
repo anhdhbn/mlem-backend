@@ -156,15 +156,15 @@ namespace MM
             {
                 app.UseSwagger(c =>
                 {
-                    c.RouteTemplate = "auth/swagger/{documentname}/swagger.json";
+                    c.RouteTemplate = "mm/swagger/{documentname}/swagger.json";
                 });
 
                 // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
                 // specifying the Swagger JSON endpoint.
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/auth/swagger/v1/swagger.json", "Auth API");
-                    c.RoutePrefix = "auth/swagger";
+                    c.SwaggerEndpoint("/mm/swagger/v1/swagger.json", "Auth API");
+                    c.RoutePrefix = "mm/swagger";
                 });
                 app.UseDeveloperExceptionPage();
             }
