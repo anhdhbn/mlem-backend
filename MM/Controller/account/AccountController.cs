@@ -56,9 +56,7 @@ namespace MM.Controller.account
                 Password = Account_LoginDTO.Password
             };
             Account = await AccountService.Login(Account);
-            Response.Cookies.Append("Token", Account.Token);
-            Account_AccountDTO Account_AccountDTO = new Account_AccountDTO(Account);
-            Account_AccountDTO.Token = Account.Token;
+            
             if (!Account.IsValidated)
             {
                 switch (Account.Errors.Values.FirstOrDefault())
@@ -69,6 +67,9 @@ namespace MM.Controller.account
                         return BadRequest("Bạn đã nhập sai mật khẩu.");
                 }
             }
+            Response.Cookies.Append("Token", Account.Token);
+            Account_AccountDTO Account_AccountDTO = new Account_AccountDTO(Account);
+            Account_AccountDTO.Token = Account.Token;
             return Ok(Account_AccountDTO);
         }
         #endregion
