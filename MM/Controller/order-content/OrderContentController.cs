@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MM.Rpc.order_content
+namespace MM.Controller.order_content
 {
     public class OrderContentRoute : Root
     {
