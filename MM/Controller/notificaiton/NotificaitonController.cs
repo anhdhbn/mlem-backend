@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MM.Rpc.notificaiton
+namespace MM.Controller.notificaiton
 {
     public class NotificaitonRoute : Root
     {
@@ -26,7 +26,7 @@ namespace MM.Rpc.notificaiton
         public const string SingleListAccount = Default + "/single-list-account";
     }
 
-    public class NotificaitonController : RpcController
+    public class NotificaitonController : ApiController
     {
         private IAccountService AccountService;
         private INotificaitonService NotificaitonService;

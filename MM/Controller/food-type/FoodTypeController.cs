@@ -23,7 +23,7 @@ namespace MM.Rpc.food_type
         public const string Update = Default + "/update";
     }
 
-    public class FoodTypeController : RpcController
+    public class FoodTypeController : ApiController
     {
         private IFoodTypeService FoodTypeService;
         private ICurrentContext CurrentContext;

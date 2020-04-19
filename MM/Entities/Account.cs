@@ -22,6 +22,8 @@ namespace MM.Entities
         public DateTime? Dob { get; set; }
         public string Avatar { get; set; }
         public long RoleId { get; set; }
+        public List<AccountFoodFavorite> AccountFoodFavorites { get; set; }
+        public List<Order> Orders { get; set; }
 
         public bool Equals(Account other)
         {

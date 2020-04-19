@@ -24,7 +24,7 @@ namespace MM.Rpc.food_grouping
         public const string Delete = Default + "/delete";
     }
 
-    public class FoodGroupingController : RpcController
+    public class FoodGroupingController : ApiController
     {
         private IFoodGroupingService FoodGroupingService;
         private ICurrentContext CurrentContext;

@@ -1,12 +1,15 @@
 using Common;
 using Microsoft.AspNetCore.Mvc;
 using MM.Entities;
+using MM.Services.MAccount;
 using MM.Services.MFood;
+using MM.Services.MOrder;
+using MM.Services.MOrderContent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MM.Rpc.food
+namespace MM.Controller.food
 {
     public class FoodRoute : Root
     {
@@ -15,22 +18,34 @@ namespace MM.Rpc.food
         private const string Default = Api + Module + "/food";
         public const string Count = Default + "/count";
         public const string List = Default + "/list";
+        public const string ListFavorite = Default + "/list-favorite";
+        public const string ListRecently = Default + "/list-recently";
+        public const string ListTopOrder = Default + "/list-top-order";
         public const string Get = Default + "/get";
         public const string Create = Default + "/create";
         public const string Update = Default + "/update";
         public const string Delete = Default + "/delete";
     }
 
-    public class FoodController : RpcController
+    public class FoodController : ApiController
     {
+        private IAccountService AccountService;
         private IFoodService FoodService;
+        private IOrderService OrderService;
+        private IOrderContentService OrderContentService;
         private ICurrentContext CurrentContext;
         public FoodController(
+            IAccountService AccountService,
             IFoodService FoodService,
+            IOrderService OrderService,
+            IOrderContentService OrderContentService,
             ICurrentContext CurrentContext
         )
         {
+            this.AccountService = AccountService;
             this.FoodService = FoodService;
+            this.OrderService = OrderService;
+            this.OrderContentService = OrderContentService;
             this.CurrentContext = CurrentContext;
         }
 
@@ -56,6 +71,66 @@ namespace MM.Rpc.food
             List<Food_FoodDTO> Food_FoodDTOs = Foods
                 .Select(c => new Food_FoodDTO(c)).ToList();
             return Food_FoodDTOs;
+        }
+        [Route(FoodRoute.ListFavorite), HttpPost]
+        public async Task<ActionResult<List<Food_AccountFoodFavoriteDTO>>> ListFavorite()
+        {
+            if (!ModelState.IsValid)
+                throw new BindException(ModelState);
+
+            var Account = await AccountService.Get(CurrentContext.AccountId);
+
+            List<AccountFoodFavorite> AccountFoodFavorites = Account.AccountFoodFavorites;
+            List<Food_AccountFoodFavoriteDTO> Food_AccountFoodFavoriteDTOs = AccountFoodFavorites
+                .Select(c => new Food_AccountFoodFavoriteDTO(c)).ToList();
+            return Food_AccountFoodFavoriteDTOs;
+        }
+        [Route(FoodRoute.ListRecently), HttpPost]
+        public async Task<ActionResult<List<Food_FoodFoodTypeMappingDTO>>> ListRecently([FromBody] Food_FoodFilterDTO Food_FoodFilterDTO)
+        {
+            if (!ModelState.IsValid)
+                throw new BindException(ModelState);
+
+            var AccountId = CurrentContext.AccountId;
+            OrderFilter OrderFilter = new OrderFilter
+            {
+                Skip = 0,
+                Take = 10,
+                AccountId = new IdFilter { Equal = AccountId },
+                StatusId = new IdFilter { Equal = Enums.OrderStatus.DONE.Id },
+                OrderBy = OrderOrder.OrderDate,
+                OrderType = OrderType.DESC,
+                Selects = OrderSelect.ALL
+            };
+
+            List<Order> Orders = await OrderService.List(OrderFilter);
+            List<OrderContent> OrderContents = Orders.SelectMany(o => o.OrderContents).Skip(0).Take(10).ToList();
+            List<Food_FoodFoodTypeMappingDTO> Food_FoodFoodTypeMappingDTOs = OrderContents
+                .Select(o => new Food_FoodFoodTypeMappingDTO(o.FoodFoodTypeMapping)).ToList();
+
+            return Food_FoodFoodTypeMappingDTOs;
+        }
+        [Route(FoodRoute.ListTopOrder), HttpPost]
+        public async Task<ActionResult<List<Food_FoodFoodTypeMappingDTO>>> ListTopOrder([FromBody] Food_FoodFilterDTO Food_FoodFilterDTO)
+        {
+            if (!ModelState.IsValid)
+                throw new BindException(ModelState);
+
+            OrderContentFilter OrderContentFilter = new OrderContentFilter
+            {
+                Skip = 0,
+                Take = 10,
+                Selects = OrderContentSelect.ALL,
+                OrderBy = OrderContentOrder.Quantity,
+                OrderType = OrderType.DESC
+            };
+
+            List<OrderContent> OrderContents = await OrderContentService.List(OrderContentFilter);
+
+            List<Food_FoodFoodTypeMappingDTO> Food_FoodFoodTypeMappingDTOs = OrderContents
+                .Select(o => new Food_FoodFoodTypeMappingDTO(o.FoodFoodTypeMapping)).ToList();
+
+            return Food_FoodFoodTypeMappingDTOs;
         }
 
         [Route(FoodRoute.Get), HttpPost]

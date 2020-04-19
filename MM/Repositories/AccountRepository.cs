@@ -211,6 +211,35 @@ namespace MM.Repositories
             if (Account == null)
                 return null;
 
+            Account.AccountFoodFavorites = await DataContext.AccountFoodFavorite.Where(x => x.AccountId == Id)
+                .Select(x => new AccountFoodFavorite
+                {
+                    AccountId = x.AccountId,
+                    FoodId = x.FoodId,
+                    Food = new Food
+                    {
+                        Id = x.Food.Id,
+                        Name = x.Food.Name,
+                        Descreption = x.Food.Descreption,
+                        PriceEach = x.Food.PriceEach,
+                        DiscountRate = x.Food.DiscountRate,
+                        Image = x.Food.Image
+                    }
+                }).ToListAsync();
+
+            Account.Orders = await DataContext.Order.Where(x => x.AccountId == Id)
+                .Select(x => new Order
+                {
+                    AccountId = x.AccountId,
+                    Code = x.Code,
+                    Descreption = x.Descreption,
+                    Id = x.Id,
+                    NumOfPerson = x.NumOfPerson,
+                    NumOfTable = x.NumOfTable,
+                    OrderDate = x.OrderDate,
+                    PayDate = x.PayDate,
+                    StatusId = x.StatusId
+                }).ToListAsync();
             return Account;
         }
         public async Task<bool> Create(Account Account)
@@ -260,7 +289,22 @@ namespace MM.Repositories
 
         private async Task SaveReference(Account Account)
         {
-
+            await DataContext.AccountFoodFavorite.Where(a => a.AccountId == Account.Id).DeleteFromQueryAsync();
+            if(Account.AccountFoodFavorites != null)
+            {
+                List<AccountFoodFavoriteDAO> AccountFoodFavoriteDAOs = new List<AccountFoodFavoriteDAO>();
+                foreach (var AccountFoodFavorite in Account.AccountFoodFavorites)
+                {
+                    AccountFoodFavoriteDAO AccountFoodFavoriteDAO = new AccountFoodFavoriteDAO
+                    {
+                        AccountId = Account.Id,
+                        FoodId = AccountFoodFavorite.FoodId
+                    };
+                    AccountFoodFavoriteDAOs.Add(AccountFoodFavoriteDAO);
+                }
+                DataContext.AccountFoodFavorite.AddRange(AccountFoodFavoriteDAOs);
+            }
+            await DataContext.SaveChangesAsync();
         }
     }
 }

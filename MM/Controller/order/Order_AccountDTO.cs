@@ -4,9 +4,9 @@ using System.Linq;
 using System.Collections.Generic;
 using MM.Entities;
 
-namespace MM.Rpc.notificaiton
+namespace MM.Controller.order
 {
-    public class Notificaiton_AccountDTO : DataDTO
+    public class Order_AccountDTO : DataDTO
     {
         
         public long Id { get; set; }
@@ -38,8 +38,8 @@ namespace MM.Rpc.notificaiton
         public long RoleId { get; set; }
         
 
-        public Notificaiton_AccountDTO() {}
-        public Notificaiton_AccountDTO(Account Account)
+        public Order_AccountDTO() {}
+        public Order_AccountDTO(Account Account)
         {
             
             this.Id = Account.Id;
@@ -64,14 +64,13 @@ namespace MM.Rpc.notificaiton
             
             this.Avatar = Account.Avatar;
             
-            
             this.RoleId = Account.RoleId;
             
             this.Errors = Account.Errors;
         }
     }
 
-    public class Notificaiton_AccountFilterDTO : FilterDTO
+    public class Order_AccountFilterDTO : FilterDTO
     {
         
         public IdFilter Id { get; set; }
@@ -95,7 +94,6 @@ namespace MM.Rpc.notificaiton
         public DateFilter Dob { get; set; }
         
         public StringFilter Avatar { get; set; }
-        
         
         public IdFilter RoleId { get; set; }
         

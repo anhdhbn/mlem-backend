@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using MM.Entities;
 
-namespace MM.Rpc.food
+namespace MM.Controller.food
 {
     public class Food_FoodDTO : DataDTO
     {

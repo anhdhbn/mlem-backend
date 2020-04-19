@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MM.Rpc.order
+namespace MM.Controller.order
 {
     public class OrderRoute : Root
     {
@@ -23,7 +23,7 @@ namespace MM.Rpc.order
         public const string SingleListAccount = Default + "/single-list-account";
     }
 
-    public class OrderController : RpcController
+    public class OrderController : ApiController
     {
         private IAccountService AccountService;
         private IOrderService OrderService;

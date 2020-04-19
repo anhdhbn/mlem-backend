@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Reflection;
 
-namespace MM.Rpc
+namespace MM.Controller
 {
-    public class RpcController : ControllerBase
+    public class ApiController : ControllerBase
     {
     }
 }

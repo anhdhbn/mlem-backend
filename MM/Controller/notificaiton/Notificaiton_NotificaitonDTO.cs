@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using MM.Entities;
 
-namespace MM.Rpc.notificaiton
+namespace MM.Controller.notificaiton
 {
     public class Notificaiton_NotificaitonDTO : DataDTO
     {

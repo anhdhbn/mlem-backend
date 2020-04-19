@@ -18,6 +18,8 @@ namespace MM.Entities
         public string Descreption { get; set; }
         public long StatusId { get; set; }
         public Account Account { get; set; }
+        public List<OrderContent> OrderContents { get; set; }
+        public List<Table> Tables { get; set; }
 
         public bool Equals(Order other)
         {
@@ -72,5 +74,7 @@ namespace MM.Entities
         NumOfPerson = E._6,
         Descreption = E._7,
         Status = E._8,
+        OrderContents = E._9,
+        Tables = E._10,
     }
 }

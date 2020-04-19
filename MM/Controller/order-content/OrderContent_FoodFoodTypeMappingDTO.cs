@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using MM.Entities;
 
-namespace MM.Rpc.order_content
+namespace MM.Controller.order_content
 {
     public class OrderContent_FoodFoodTypeMappingDTO : DataDTO
     {

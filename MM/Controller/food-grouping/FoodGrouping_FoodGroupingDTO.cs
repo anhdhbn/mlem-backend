@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using MM.Entities;
 
-namespace MM.Rpc.food_grouping
+namespace MM.Controller.food_grouping
 {
     public class FoodGrouping_FoodGroupingDTO : DataDTO
     {

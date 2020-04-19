@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using MM.Entities;
 
-namespace MM.Rpc.table
+namespace MM.Controller.table
 {
     public class Table_TableDTO : DataDTO
     {

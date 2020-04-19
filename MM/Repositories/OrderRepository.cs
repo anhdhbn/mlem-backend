@@ -188,6 +188,46 @@ namespace MM.Repositories
                     Avatar = q.Account.Avatar,
                     RoleId = q.Account.RoleId,
                 } : null,
+                OrderContents = filter.Selects.Contains(OrderSelect.OrderContents) && q.OrderContents == null ? null : 
+                q.OrderContents.Select(c => new OrderContent
+                {
+                    Id = c.Id,
+                    Code = c.Code,
+                    FoodFoodTypeMappingId = c.FoodFoodTypeMappingId,
+                    OrderId = c.OrderId,
+                    Quantity = c.Quantity,
+                    StatusId = c.StatusId,
+                    FoodFoodTypeMapping = new FoodFoodTypeMapping
+                    {
+                        Id = c.FoodFoodTypeMapping.Id,
+                        FoodId = c.FoodFoodTypeMapping.FoodId,
+                        FoodTypeId = c.FoodFoodTypeMapping.FoodTypeId,
+                        Food = new Food
+                        {
+                            Id = c.FoodFoodTypeMapping.Food.Id,
+                            Descreption = c.FoodFoodTypeMapping.Food.Descreption,
+                            DiscountRate = c.FoodFoodTypeMapping.Food.DiscountRate,
+                            Image = c.FoodFoodTypeMapping.Food.Image,
+                            Name = c.FoodFoodTypeMapping.Food.Name,
+                            PriceEach = c.FoodFoodTypeMapping.Food.PriceEach,
+                            StatusId = c.FoodFoodTypeMapping.Food.StatusId,
+                        },
+                        FoodType = new FoodType
+                        {
+                            Id = c.FoodFoodTypeMapping.FoodType.Id,
+                            Name = c.FoodFoodTypeMapping.FoodType.Name,
+                            StatusId = c.FoodFoodTypeMapping.FoodType.StatusId,
+                        }
+                    }
+                }).ToList(),
+                Tables = filter.Selects.Contains(OrderSelect.Tables) && q.Tables == null ? null :
+                q.Tables.Select(t => new Table
+                {
+                    Id = t.Id,
+                    Code = t.Code,
+                    OrderId = t.OrderId,
+                    StatusId = t.StatusId
+                }).ToList()
             }).AsNoTracking().ToListAsync();
             return Orders;
         }
@@ -241,7 +281,44 @@ namespace MM.Repositories
 
             if (Order == null)
                 return null;
-
+            Order.OrderContents = await DataContext.OrderContent.Where(o => o.OrderId == Id).Select(c => new OrderContent
+            {
+                Id = c.Id,
+                Code = c.Code,
+                FoodFoodTypeMappingId = c.FoodFoodTypeMappingId,
+                OrderId = c.OrderId,
+                Quantity = c.Quantity,
+                StatusId = c.StatusId,
+                FoodFoodTypeMapping = new FoodFoodTypeMapping
+                {
+                    Id = c.FoodFoodTypeMapping.Id,
+                    FoodId = c.FoodFoodTypeMapping.FoodId,
+                    FoodTypeId = c.FoodFoodTypeMapping.FoodTypeId,
+                    Food = new Food
+                    {
+                        Id = c.FoodFoodTypeMapping.Food.Id,
+                        Descreption = c.FoodFoodTypeMapping.Food.Descreption,
+                        DiscountRate = c.FoodFoodTypeMapping.Food.DiscountRate,
+                        Image = c.FoodFoodTypeMapping.Food.Image,
+                        Name = c.FoodFoodTypeMapping.Food.Name,
+                        PriceEach = c.FoodFoodTypeMapping.Food.PriceEach,
+                        StatusId = c.FoodFoodTypeMapping.Food.StatusId,
+                    },
+                    FoodType = new FoodType
+                    {
+                        Id = c.FoodFoodTypeMapping.FoodType.Id,
+                        Name = c.FoodFoodTypeMapping.FoodType.Name,
+                        StatusId = c.FoodFoodTypeMapping.FoodType.StatusId,
+                    }
+                }
+            }).ToListAsync();
+            Order.Tables = await DataContext.Table.Where(o => o.OrderId == Id).Select(t => new Table
+            {
+                Id = t.Id,
+                Code = t.Code,
+                OrderId = t.OrderId,
+                StatusId = t.StatusId
+            }).ToListAsync();
             return Order;
         }
         public async Task<bool> Create(Order Order)
@@ -325,7 +402,26 @@ namespace MM.Repositories
 
         private async Task SaveReference(Order Order)
         {
+            await DataContext.OrderContent.Where(o => o.OrderId == Order.Id).DeleteFromQueryAsync();
+            if (Order.OrderContents != null)
+            {
+                List<OrderContentDAO> OrderContentDAOs = new List<OrderContentDAO>();
+                foreach (var OrderContent in Order.OrderContents)
+                {
+                    OrderContentDAO OrderContentDAO = new OrderContentDAO
+                    {
+                        Id = OrderContent.Id,
+                        Code = OrderContent.Code,
+                        FoodFoodTypeMappingId = OrderContent.FoodFoodTypeMappingId,
+                        OrderId = OrderContent.OrderId,
+                        Quantity = OrderContent.Quantity,
+                        StatusId = OrderContent.StatusId
+                    };
+                    OrderContentDAOs.Add(OrderContentDAO);
+                }
+                DataContext.OrderContent.AddRange(OrderContentDAOs);
+            }
+            await DataContext.SaveChangesAsync();
         }
-        
     }
 }

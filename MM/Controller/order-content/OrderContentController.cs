@@ -26,7 +26,7 @@ namespace MM.Rpc.order_content
         public const string SingleListOrder = Default + "/single-list-order";
     }
 
-    public class OrderContentController : RpcController
+    public class OrderContentController : ApiController
     {
         private IOrderService OrderService;
         private IOrderContentService OrderContentService;

@@ -1,18 +1,19 @@
-using Common;
-using System;
-using System.Linq;
-using System.Collections.Generic;
+﻿using Common;
 using MM.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace MM.Rpc.food_type
+namespace MM.Controller.food
 {
-    public class FoodType_FoodTypeDTO : DataDTO
+    public class Food_FoodTypeDTO : DataDTO
     {
         public long Id { get; set; }
         public string Name { get; set; }
         public long StatusId { get; set; }
-        public FoodType_FoodTypeDTO() {}
-        public FoodType_FoodTypeDTO(FoodType FoodType)
+        public Food_FoodTypeDTO() { }
+        public Food_FoodTypeDTO(FoodType FoodType)
         {
             this.Id = FoodType.Id;
             this.Name = FoodType.Name;
@@ -21,7 +22,7 @@ namespace MM.Rpc.food_type
         }
     }
 
-    public class FoodType_FoodTypeFilterDTO : FilterDTO
+    public class Food_FoodTypeFilterDTO : FilterDTO
     {
         public IdFilter Id { get; set; }
         public StringFilter Name { get; set; }

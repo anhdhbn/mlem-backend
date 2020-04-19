@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MM.Rpc.table
+namespace MM.Controller.table
 {
     public class TableRoute : Root
     {
@@ -26,7 +26,7 @@ namespace MM.Rpc.table
         public const string SingleListOrder = Default + "/single-list-order";
     }
 
-    public class TableController : RpcController
+    public class TableController : ApiController
     {
         private IOrderService OrderService;
         private ITableService TableService;
