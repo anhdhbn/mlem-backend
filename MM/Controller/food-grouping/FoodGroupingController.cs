@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MM.Rpc.food_grouping
+namespace MM.Controller.food_grouping
 {
     public class FoodGroupingRoute : Root
     {
