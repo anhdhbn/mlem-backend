@@ -22,6 +22,7 @@ namespace MM.Controller.account
         public DateTime? Dob { get; set; }
         public string Avatar { get; set; }
         public long RoleId { get; set; }
+        public List<Account_AccountFoodFavoriteDTO> Account_AccountFoodFavorites { get; set; }
         public Account_AccountDTO() { }
         public Account_AccountDTO(Account Account)
         {
@@ -37,6 +38,7 @@ namespace MM.Controller.account
             this.Dob = Account.Dob;
             this.Avatar = Account.Avatar;
             this.RoleId = Account.RoleId;
+            this.Account_AccountFoodFavorites = Account.AccountFoodFavorites?.Select(a => new Account_AccountFoodFavoriteDTO(a)).ToList();
             this.Errors = Account.Errors;
         }
     }

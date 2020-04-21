@@ -25,6 +25,7 @@ namespace MM.Services.MAccount
         Task<Account> Login(Account Account);
         Task<Account> Create(Account Account);
         Task<Account> Update(Account Account);
+        Task<Account> LikeFood(Account Account);
         Task<Account> ChangePassword(Account Account);
         Task<Account> ForgotPassword(Account Account);
         Task<Account> VerifyCode(Account Account);
@@ -140,6 +141,39 @@ namespace MM.Services.MAccount
 
                 var newData = await UOW.AccountRepository.Get(Account.Id);
                 return newData;
+            }
+            catch (Exception ex)
+            {
+                await UOW.Rollback();
+                if (ex.InnerException == null)
+                    throw new MessageException(ex);
+                else
+                    throw new MessageException(ex.InnerException);
+            }
+        }
+
+        public async Task<Account> LikeFood(Account Account)
+        {
+            try
+            {
+                var oldData = await UOW.AccountRepository.Get(Account.Id);
+                oldData.AccountFoodFavorites = new List<AccountFoodFavorite>();
+                if(Account.AccountFoodFavorites != null)
+                {
+                    foreach (var AccountFoodFavorite in Account.AccountFoodFavorites)
+                    {
+                        AccountFoodFavorite accountFoodFavorite = new AccountFoodFavorite
+                        {
+                            AccountId = Account.Id,
+                            FoodId = AccountFoodFavorite.FoodId
+                        };
+                        oldData.AccountFoodFavorites.Add(accountFoodFavorite);
+                    }
+                }
+                await UOW.Begin();
+                await UOW.AccountRepository.Update(oldData);
+                await UOW.Commit();
+                return oldData;
             }
             catch (Exception ex)
             {

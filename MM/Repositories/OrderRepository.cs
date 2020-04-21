@@ -226,7 +226,6 @@ namespace MM.Repositories
                     Id = t.Id,
                     Code = t.Code,
                     OrderId = t.OrderId,
-                    StatusId = t.StatusId
                 }).ToList()
             }).AsNoTracking().ToListAsync();
             return Orders;
@@ -317,7 +316,6 @@ namespace MM.Repositories
                 Id = t.Id,
                 Code = t.Code,
                 OrderId = t.OrderId,
-                StatusId = t.StatusId
             }).ToListAsync();
             return Order;
         }

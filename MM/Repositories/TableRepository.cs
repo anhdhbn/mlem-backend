@@ -37,8 +37,6 @@ namespace MM.Repositories
                 query = query.Where(q => q.Id, filter.Id);
             if (filter.Code != null)
                 query = query.Where(q => q.Code, filter.Code);
-            if (filter.StatusId != null)
-                query = query.Where(q => q.StatusId, filter.StatusId);
             if (filter.OrderId != null)
                 query = query.Where(q => q.OrderId, filter.OrderId);
             query = OrFilter(query, filter);
@@ -57,8 +55,6 @@ namespace MM.Repositories
                     queryable = queryable.Where(q => q.Id, filter.Id);
                 if (filter.Code != null)
                     queryable = queryable.Where(q => q.Code, filter.Code);
-                if (filter.StatusId != null)
-                    queryable = queryable.Where(q => q.StatusId, filter.StatusId);
                 if (filter.OrderId != null)
                     queryable = queryable.Where(q => q.OrderId, filter.OrderId);
                 initQuery = initQuery.Union(queryable);
@@ -79,9 +75,6 @@ namespace MM.Repositories
                         case TableOrder.Code:
                             query = query.OrderBy(q => q.Code);
                             break;
-                        case TableOrder.Status:
-                            query = query.OrderBy(q => q.StatusId);
-                            break;
                         case TableOrder.Order:
                             query = query.OrderBy(q => q.OrderId);
                             break;
@@ -95,9 +88,6 @@ namespace MM.Repositories
                             break;
                         case TableOrder.Code:
                             query = query.OrderByDescending(q => q.Code);
-                            break;
-                        case TableOrder.Status:
-                            query = query.OrderByDescending(q => q.StatusId);
                             break;
                         case TableOrder.Order:
                             query = query.OrderByDescending(q => q.OrderId);
@@ -115,7 +105,6 @@ namespace MM.Repositories
             {
                 Id = filter.Selects.Contains(TableSelect.Id) ? q.Id : default(long),
                 Code = filter.Selects.Contains(TableSelect.Code) ? q.Code : default(string),
-                StatusId = filter.Selects.Contains(TableSelect.Status) ? q.StatusId : default(long),
                 OrderId = filter.Selects.Contains(TableSelect.Order) ? q.OrderId : default(long?),
                 Order = filter.Selects.Contains(TableSelect.Order) && q.Order != null ? new Order
                 {
@@ -156,7 +145,6 @@ namespace MM.Repositories
             {
                 Id = x.Id,
                 Code = x.Code,
-                StatusId = x.StatusId,
                 OrderId = x.OrderId,
                 Order = x.Order == null ? null : new Order
                 {
@@ -182,7 +170,6 @@ namespace MM.Repositories
             TableDAO TableDAO = new TableDAO();
             TableDAO.Id = Table.Id;
             TableDAO.Code = Table.Code;
-            TableDAO.StatusId = Table.StatusId;
             TableDAO.OrderId = Table.OrderId;
             DataContext.Table.Add(TableDAO);
             await DataContext.SaveChangesAsync();
@@ -198,7 +185,6 @@ namespace MM.Repositories
                 return false;
             TableDAO.Id = Table.Id;
             TableDAO.Code = Table.Code;
-            TableDAO.StatusId = Table.StatusId;
             TableDAO.OrderId = Table.OrderId;
             await DataContext.SaveChangesAsync();
             await SaveReference(Table);
@@ -219,7 +205,6 @@ namespace MM.Repositories
                 TableDAO TableDAO = new TableDAO();
                 TableDAO.Id = Table.Id;
                 TableDAO.Code = Table.Code;
-                TableDAO.StatusId = Table.StatusId;
                 TableDAO.OrderId = Table.OrderId;
                 TableDAOs.Add(TableDAO);
             }

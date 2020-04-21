@@ -126,7 +126,6 @@ namespace MM.Controller.table
             Table Table = new Table();
             Table.Id = Table_TableDTO.Id;
             Table.Code = Table_TableDTO.Code;
-            Table.StatusId = Table_TableDTO.StatusId;
             Table.OrderId = Table_TableDTO.OrderId;
             Table.Order = Table_TableDTO.Order == null ? null : new Order
             {
@@ -155,7 +154,6 @@ namespace MM.Controller.table
 
             TableFilter.Id = Table_TableFilterDTO.Id;
             TableFilter.Code = Table_TableFilterDTO.Code;
-            TableFilter.StatusId = Table_TableFilterDTO.StatusId;
             TableFilter.OrderId = Table_TableFilterDTO.OrderId;
             return TableFilter;
         }

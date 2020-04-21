@@ -22,6 +22,7 @@ namespace MM.Controller.account
         public const string Get = Default + "/get";
         public const string Register = Default + "/register";
         public const string Update = Default + "/update";
+        public const string LikeFood = Default + "/like-food";
         public const string ChangePassword = Default + "/change-password";
         public const string ForgotPassword = Default + "/forgot-password";
         public const string RecoveryPassword = Default + "/recovery-password";
@@ -241,6 +242,27 @@ namespace MM.Controller.account
                 return Account_AccountDTO;
             else
                 return BadRequest("Số điện thoại không được bỏ trống.");
+        }
+
+        [Route(AccountRoute.LikeFood), HttpPost]
+        public async Task<ActionResult<Account_AccountDTO>> LikeFood([FromBody] Account_AccountDTO Account_AccountDTO)
+        {
+            if (!ModelState.IsValid)
+                throw new BindException(ModelState);
+
+            var Id = ExtractUserId();
+            Account Account = new Account
+            {
+                Id = Id,
+                AccountFoodFavorites = Account_AccountDTO.Account_AccountFoodFavorites.Select(a => new AccountFoodFavorite
+                {
+                    AccountId = Id,
+                    FoodId = a.FoodId
+                }).ToList()
+            };
+            Account = await AccountService.LikeFood(Account);
+            Account_AccountDTO = new Account_AccountDTO(Account);
+            return Ok(Account_AccountDTO);
         }
 
         private long ExtractUserId()

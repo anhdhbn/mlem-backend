@@ -10,7 +10,6 @@ namespace MM.Entities
     {
         public long Id { get; set; }
         public string Code { get; set; }
-        public long StatusId { get; set; }
         public long? OrderId { get; set; }
         public Order Order { get; set; }
 
@@ -28,7 +27,6 @@ namespace MM.Entities
     {
         public IdFilter Id { get; set; }
         public StringFilter Code { get; set; }
-        public IdFilter StatusId { get; set; }
         public IdFilter OrderId { get; set; }
         public List<TableFilter> OrFilter { get; set; }
         public TableOrder OrderBy {get; set;}
@@ -40,8 +38,7 @@ namespace MM.Entities
     {
         Id = 0,
         Code = 1,
-        Status = 2,
-        Order = 3,
+        Order = 2,
     }
 
     [Flags]
@@ -50,7 +47,6 @@ namespace MM.Entities
         ALL = E.ALL,
         Id = E._0,
         Code = E._1,
-        Status = E._2,
-        Order = E._3,
+        Order = E._2,
     }
 }

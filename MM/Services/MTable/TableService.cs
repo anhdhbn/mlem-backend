@@ -16,8 +16,6 @@ namespace MM.Services.MTable
         Task<Table> Create(Table Table);
         Task<Table> Update(Table Table);
         Task<Table> Delete(Table Table);
-        Task<List<Table>> BulkDelete(List<Table> Tables);
-        Task<List<Table>> Import(List<Table> Tables);
     }
 
     public class TableService : ITableService
@@ -155,53 +153,5 @@ namespace MM.Services.MTable
                     throw new MessageException(ex.InnerException);
             }
         }
-
-        public async Task<List<Table>> BulkDelete(List<Table> Tables)
-        {
-            if (!await TableValidator.BulkDelete(Tables))
-                return Tables;
-
-            try
-            {
-                await UOW.Begin();
-                await UOW.TableRepository.BulkDelete(Tables);
-                await UOW.Commit();
-                await Logging.CreateAuditLog(new { }, Tables, nameof(TableService));
-                return Tables;
-            }
-            catch (Exception ex)
-            {
-                await UOW.Rollback();
-                await Logging.CreateSystemLog(ex.InnerException, nameof(TableService));
-                if (ex.InnerException == null)
-                    throw new MessageException(ex);
-                else
-                    throw new MessageException(ex.InnerException);
-            }
-        }
-        
-        public async Task<List<Table>> Import(List<Table> Tables)
-        {
-            if (!await TableValidator.Import(Tables))
-                return Tables;
-            try
-            {
-                await UOW.Begin();
-                await UOW.TableRepository.BulkMerge(Tables);
-                await UOW.Commit();
-
-                await Logging.CreateAuditLog(Tables, new { }, nameof(TableService));
-                return Tables;
-            }
-            catch (Exception ex)
-            {
-                await UOW.Rollback();
-                await Logging.CreateSystemLog(ex.InnerException, nameof(TableService));
-                if (ex.InnerException == null)
-                    throw new MessageException(ex);
-                else
-                    throw new MessageException(ex.InnerException);
-            }
-        }     
     }
 }

@@ -20,6 +20,7 @@ namespace MM.Repositories
         INotificaitonRepository NotificaitonRepository { get; }
         IOrderContentRepository OrderContentRepository { get; }
         IOrderRepository OrderRepository { get; }
+        IReservationRepository ReservationRepository { get; }
         ITableRepository TableRepository { get; }
     }
 
@@ -35,6 +36,7 @@ namespace MM.Repositories
         public INotificaitonRepository NotificaitonRepository { get; private set; }
         public IOrderContentRepository OrderContentRepository { get; private set; }
         public IOrderRepository OrderRepository { get; private set; }
+        public IReservationRepository ReservationRepository { get; private set; }
         public ITableRepository TableRepository { get; private set; }
 
         public UOW(DataContext DataContext)
@@ -49,6 +51,7 @@ namespace MM.Repositories
             NotificaitonRepository = new NotificaitonRepository(DataContext);
             OrderContentRepository = new OrderContentRepository(DataContext);
             OrderRepository = new OrderRepository(DataContext);
+            ReservationRepository = new ReservationRepository(DataContext);
             TableRepository = new TableRepository(DataContext);
         }
         public async Task Begin()

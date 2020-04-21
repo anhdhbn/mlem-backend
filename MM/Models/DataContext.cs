@@ -16,6 +16,7 @@ namespace MM.Models
         public virtual DbSet<NotificaitonDAO> Notificaiton { get; set; }
         public virtual DbSet<OrderDAO> Order { get; set; }
         public virtual DbSet<OrderContentDAO> OrderContent { get; set; }
+        public virtual DbSet<ReservationDAO> Reservation { get; set; }
         public virtual DbSet<TableDAO> Table { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
@@ -203,6 +204,17 @@ namespace MM.Models
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderContent_Order");
+            });
+
+            modelBuilder.Entity<ReservationDAO>(entity =>
+            {
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.HasOne(d => d.Table)
+                    .WithMany(p => p.Reservations)
+                    .HasForeignKey(d => d.TableId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Reservation_Table");
             });
 
             modelBuilder.Entity<TableDAO>(entity =>
