@@ -6,7 +6,7 @@ namespace Common
     public class Root
     {
         protected const string Module = "mm";
-        protected const string Api = "api";
+        protected const string Api = "api/";
         protected const string Rest = "rest/";
     }
 
